@@ -1,61 +1,51 @@
 import { Injectable } from '@nestjs/common';
 import { Author } from '../entity/Author'
 import { Entity, Repository, getRepository, getConnectionManager, Connection } from 'typeorm';
-import { ConnectionService } from './connection.service';
+// import { ConnectionService } from './connection.service';
 import { connect } from '../config';
+import { Message } from 'src/entity/Message';
+import { Thread } from 'src/entity/Thread';
+import { ifcFeedLine } from 'src/interfaces/FeedLine';
 
 @Injectable()
-export class AuthorService {
+export class ChannelService {
   // private readonly cats: Cat[] = [];
-  private authorRepository: Repository<Author> = null;
+  private messageRepository: Repository<Message> = null;
+  private threadRepository: Repository<Thread> = null;
 
-  constructor(private connectionService: ConnectionService) {
-    // console.log('SINT',this.connectionService.getSqlManagerInstance)
-    
+  constructor() {
 
-    
-  }
-
-  public setRepo = async () => {
-
-    return new Promise((resolve, reject) => {
-      // while(!this.connectionService.isConnected) {
-        this.connectionService.getSqlManagerInstance.then(async (connection: Connection) => {
-          this.connectionService.isConnected = true;
-          this.authorRepository = connection.getRepository(Author)
-        }).catch(err => {
-          console.log('connectionErr', err)
-        }) 
-      // }
-    })
-    
     
   }
-  
+
   getRepo = async (): Promise<void> => {
-    if(!this.authorRepository) {
+    if(!this.messageRepository && !this.threadRepository) {
       const connection = await connect();
-      this.authorRepository = connection.getRepository(Author);
+      this.messageRepository = connection.getRepository(Message)
+      this.threadRepository = connection.getRepository(Thread);
     }
   }
 
 
 
-  async findAll(): Promise<Author[]> {
+  async findAll(): Promise<ifcFeedLine[]> {
     await this.getRepo();
-    const all = await this.authorRepository.createQueryBuilder('author').getMany()
-    console.log(all)
-    return all;
+    // const all = await this.messageRepository.createQueryBuilder('author').getMany()
+    const allMessages = this.messageRepository.createQueryBuilder('message').getMany()
+    const allThreads = this.messageRepository.createQueryBuilder('thread').getMany()
+    
+    
+    return allMessages;
     // return this.authorRepository.createQueryBuilder();
   }
 
-  async create(firstName: string): Promise<Author> {
-    await this.getRepo()
-    const newAuthor = this.authorRepository.create({
-      firstName: firstName
-    });
-    return this.authorRepository.save(newAuthor);
-  }
+  // async create(firstName: string): Promise<Author> {
+  //   await this.getRepo()
+  //   const newAuthor = this.authorRepository.create({
+  //     firstName: firstName
+  //   });
+  //   return this.authorRepository.save(newAuthor);
+  // }
 
 
   
