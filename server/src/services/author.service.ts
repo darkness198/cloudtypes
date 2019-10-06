@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Author } from '../entity/Author'
 import { Entity, Repository, getRepository, getConnectionManager, Connection } from 'typeorm';
-import { ConnectionService } from './connection.service';
+// import { ConnectionService } from './connection.service';
 import { connect } from '../config';
 
 @Injectable()
@@ -9,28 +9,28 @@ export class AuthorService {
   // private readonly cats: Cat[] = [];
   private authorRepository: Repository<Author> = null;
 
-  constructor(private connectionService: ConnectionService) {
+  constructor() {
     // console.log('SINT',this.connectionService.getSqlManagerInstance)
     
 
     
   }
 
-  public setRepo = async () => {
+  // public setRepo = async () => {
 
-    return new Promise((resolve, reject) => {
-      // while(!this.connectionService.isConnected) {
-        this.connectionService.getSqlManagerInstance.then(async (connection: Connection) => {
-          this.connectionService.isConnected = true;
-          this.authorRepository = connection.getRepository(Author)
-        }).catch(err => {
-          console.log('connectionErr', err)
-        }) 
-      // }
-    })
+  //   return new Promise((resolve, reject) => {
+  //     // while(!this.connectionService.isConnected) {
+  //       this.connectionService.getSqlManagerInstance.then(async (connection: Connection) => {
+  //         this.connectionService.isConnected = true;
+  //         this.authorRepository = connection.getRepository(Author)
+  //       }).catch(err => {
+  //         console.log('connectionErr', err)
+  //       }) 
+  //     // }
+  //   })
     
     
-  }
+  // }
   
   getRepo = async (): Promise<void> => {
     if(!this.authorRepository) {
