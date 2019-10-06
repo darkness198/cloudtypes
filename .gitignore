@@ -82,6 +82,3 @@ gcpcred.json
 #cloud_sql_proxy(device specific)
 cloud_sql_proxy
 
-#prettier-rc 
-server/*.prettierrc
-
