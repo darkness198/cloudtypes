@@ -1,4 +1,4 @@
-import { Field, Int, ObjectType } from 'type-graphql';
+import { Field, Int, ObjectType} from 'type-graphql';
 import { Post } from './Post';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, BaseEntity } from 'typeorm';
 import { Message } from './Message';
@@ -27,6 +27,38 @@ export class Author extends BaseEntity{
   })
   @Field({ nullable: true })
   lastName?: string;
+
+  @Column({ 
+    type: 'varchar',
+    nullable: true,
+    length: 200
+  })
+  @Field({ nullable: true })
+  displayName?: string;
+
+  @Column({ 
+    type: 'varchar',
+    nullable: true,
+    length: 200
+  })
+  @Field({ nullable: true })
+  email?: string;
+
+  @Column({ 
+    type: 'varchar',
+    nullable: true,
+    length: 200
+  })
+  @Field({ nullable: true })
+  password?: string;
+
+  @Column({ 
+    type: 'varchar',
+    nullable: true,
+    length: 1000
+  })
+  @Field({ nullable: true })
+  refreshToken?: string;
 
   @OneToMany(type => Post, post => post.owner)  
   @Field(type => [Post])
