@@ -3,13 +3,16 @@ import { Author } from '../entity/Author'
 import { Entity, Repository, getRepository, getConnectionManager, Connection } from 'typeorm';
 // import { ConnectionService } from './connection.service';
 import { connect } from '../config';
+import * as admin from 'firebase-admin';
+import { UserService } from '../services/user.service';
+
 
 @Injectable()
 export class AuthorService {
   // private readonly cats: Cat[] = [];
   private authorRepository: Repository<Author> = null;
 
-  constructor() {
+  constructor(private userService: UserService) {
     // console.log('SINT',this.connectionService.getSqlManagerInstance)
     
 
@@ -32,7 +35,7 @@ export class AuthorService {
     
   // }
   
-  getRepo = async (): Promise<void> => {
+  public getRepo = async (): Promise<void> => {
     if(!this.authorRepository) {
       const connection = await connect();
       this.authorRepository = connection.getRepository(Author);
@@ -55,10 +58,17 @@ export class AuthorService {
     // return this.authorRepository.createQueryBuilder();
   }
 
-  async create(firstName: string): Promise<Author> {
+  async create(newUser: admin.auth.UserRecord): Promise<Author> {
     await this.getRepo()
+    
+
+    const customToken = await this.userService.adminInstance.auth().createCustomToken(newUser.uid)
+
     const newAuthor = this.authorRepository.create({
-      firstName: firstName
+      email: newUser.email,
+      displayName: newUser.displayName,
+      password: newUser.passwordHash,
+      refreshToken: customToken
     });
     return this.authorRepository.save(newAuthor);
   }
