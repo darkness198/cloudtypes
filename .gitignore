@@ -82,3 +82,5 @@ gcpcred.json
 #cloud_sql_proxy(device specific)
 cloud_sql_proxy
 
+#ormconfig credentials
+server/ormconfig.json
