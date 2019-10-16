@@ -5,9 +5,8 @@ import { AppModule } from './app.module';
 import * as functions from 'firebase-functions';
 import * as express from 'express';
 import { INestApplicationContext } from '@nestjs/common';
-import { AdvancedConsoleLogger } from 'typeorm';
 import { AuthorService } from './services/author.service';
-// import { AuthorService } from './services/author.service';
+import { UserService } from './services/user.service';
 
 const server = express();
 let app: INestApplicationContext;
@@ -31,14 +30,12 @@ createNestServer(server)
 
 export const api = functions.https.onRequest(server);
 
-// export const testUserCreate = functions.auth.user().onCreate(async (user) => {
+export const testUserCreate = functions.auth.user().onCreate(async (user) => {
   
-//   console.log('user', user);
-//   const authorService = new AuthorService();
-//   const authorRepo = await authorService.getRepo();
-//   console.log('Author Service', authorService, 'Author Repository', authorRepo);
+  console.log('user', user);
+  const authorService = new AuthorService(new UserService());
+  const authorRepo = await authorService.getRepo();
+  console.log('Author Service', authorService, 'Author Repository', authorRepo);
 
-  
-
-// });
+});
 

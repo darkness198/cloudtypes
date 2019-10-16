@@ -13,7 +13,7 @@ import { Author } from "src/entity/Author";
 //   password: string;
 // }
 
-@InputType({ description: "New recipe data" })
+@InputType({ description: "New author data" })
 export class AddAuthorInput implements Partial<Author> {
   @Field({ nullable: true })
   displayName?: string;
